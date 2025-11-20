@@ -9,8 +9,15 @@ st.set_page_config(page_title="Gemini 手機口譯", page_icon="🌍")
 st.title("🌍 Gemini 手機即時口譯")
 
 # --- 設定區 ---
-with st.expander("🛠️ 設定與 API Key (點擊展開)", expanded=True):
-    api_key = st.text_input("Gemini API Key", type="password", placeholder="貼上你的 AIza...金鑰")
+with st.expander("🛠️ 設定 (點擊展開)", expanded=False):
+    # 嘗試從 Secrets 讀取 Key
+    if "GEMINI_API_KEY" in st.secrets:
+        api_key = st.secrets["GEMINI_API_KEY"]
+        st.success("✅ API Key 已自動載入")
+    else:
+        # 如果沒有設定 Secrets，才顯示輸入框
+        api_key = st.text_input("Gemini API Key", type="password")
+    
     target_lang = st.selectbox("目標語言", ["英文", "日文", "韓文", "繁體中文"])
 
 lang_map = {
@@ -76,3 +83,4 @@ try:
 
 except Exception as e:
     st.error(f"發生未預期的錯誤: {e}")
+
